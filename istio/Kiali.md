@@ -1,9 +1,4 @@
----
-title: Visualizing Your Mesh
-description: This task shows you how to visualize your services within an Istio mesh.
-weight: 49
-keywords: [telemetry,visualization]
----
+
 
 This task shows you how to visualize different aspects of your Istio mesh.
 
