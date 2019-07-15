@@ -38,13 +38,13 @@ The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is u
    
 3. Open the Istio Dashboard via the Grafana UI.
 
-  In Kubernetes environments, execute the following command:
+   In Kubernetes environments, execute the following command:
   
-  ```
-  $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &amp;
-  ```
+   ```
+    $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}')        3000:3000 &
+   ```
   
-  Visit [http://localhost:3000/dashboard/db/istio-mesh-dashboard](http://localhost:3000/dashboard/db/istio-mesh-dashboard) in your web browser.
+  Visit [http://localhost:3000/dashboard/db/istio-mesh-dashboard](http://localhost:3000/dashboard/db/istio-mesh-dashboard) in your web     browser.
 
   The Istio Dashboard will look similar to:
 
@@ -69,7 +69,7 @@ The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is u
 
                             Istio Dashboard With Traffic
 
-  This gives the global view of the Mesh along with services and workloads in the mesh. You can get more details about services and workloads by navigating to their specific dashboards as explained below.
+  This gives the global view of the Mesh along with services and workloads in the mesh. You can get more details about services and     workloads by navigating to their specific dashboards as explained below.
 
 5. Visualize Service Dashboards.
 
