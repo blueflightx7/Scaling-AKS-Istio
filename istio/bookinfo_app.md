@@ -1,7 +1,7 @@
 **INSTALL BOOKINFO SAMPLE APP**
 
 
-Change directory to the root of the Istio installation ( /istio ).
+**NOTE:** Change directory to the root of the Istio installation ( /istio ).
 
 The default Istio installation uses automatic sidecar injection. Label the namespace that will host the application with istio-injection=enabled:
 
