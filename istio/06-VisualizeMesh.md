@@ -9,6 +9,7 @@ The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is u
 
 - [Install Istio](https://istio.io/docs/setup) in your cluster. If you are installing using Helm, enable the Grafana add-on --set grafana.enabled=true[Option](https://istio.io/docs/reference/config/installation-options/).
 - Deploy [Bookinfo](https://istio.io/docs/examples/bookinfo/) application.
+- Ensure that you have Powershell session in your local computer connected to your azure account and the AKS cluster. Refer the "Initial Configuration" section for the steps. 
 
 ## **Viewing the Istio Dashboard**
 
@@ -38,7 +39,7 @@ The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is u
    
 3. Open the Istio Dashboard via the Grafana UI.
 
-   In Kubernetes environments, execute the following command:
+   In your powershell session, execute the following command:
   
    ```
     $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
