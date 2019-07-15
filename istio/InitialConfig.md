@@ -199,4 +199,6 @@ istio-telemetry-66c8f78cd9-p6j7k          2/2     Running     2          3m4s
 istio-tracing-79db5954f-qm49f             1/1     Running     0          3m3s
 prometheus-5977597c75-mfrqw               1/1     Running     0          3m4s
 ```
+**NOTE: It will take a couple of minutes for all the PODs/Services to be in running state.**
+
 **NOTE:** Ensure that you are always at the /istio directory in your jumpbox shell to execute the commands in the following exercises.
