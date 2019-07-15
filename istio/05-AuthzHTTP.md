@@ -59,6 +59,11 @@ any service in the `default` namespace that has the `app` label set to one of th
 `productpage`, `details`, `reviews`, or `ratings`
 is accessible by services in the same namespace (i.e., `default`) and services in the `istio-system` namespace.
 
+Run the following command to create the service accounts:
+```bash
+kubectl apply -f bookinfo-add-serviceaccount.yaml
+```
+
 Run the following command to create a namespace-level access control policy:
 
 ```bash
