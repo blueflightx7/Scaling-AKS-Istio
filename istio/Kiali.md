@@ -18,6 +18,7 @@ This task uses the [Bookinfo](/docs/examples/bookinfo/) sample application as th
 
 The following instructions assume you have installed Helm and use it to install Kiali.
 To install Kiali without using Helm, follow the [Kiali installation instructions](https://www.kiali.io/gettingstarted/)
+- Ensure that you have Powershell session in your local computer connected to your azure account and the AKS cluster. Refer the "Initial Configuration" exercise for the steps. 
 
 ### Create a secret
 
