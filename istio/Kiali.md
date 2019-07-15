@@ -50,33 +50,7 @@ $ helm template --set kiali.enabled=true install/kubernetes/helm/istio --name is
 $ kubectl apply -f $HOME/istio.yaml
 ```
 
-This task does not discuss Jaeger and Grafana. If
-you already installed them in your cluster and you want to see how Kiali
-integrates with them, you must pass additional arguments to the
-`helm` command, for example:
-
-```bash
-$ helm template \
-    --set kiali.enabled=true \
-    --set "kiali.dashboard.jaegerURL=http://jaeger-query:16686" \
-    --set "kiali.dashboard.grafanaURL=http://grafana:3000" \
-    install/kubernetes/helm/istio \
-    --name istio --namespace istio-system > $HOME/istio.yaml
-$ kubectl apply -f $HOME/istio.yaml
-```
-
 Once you install Istio and Kiali, deploy the [Bookinfo](/docs/examples/bookinfo/) sample application.
-
-### Running on OpenShift
-
-When Kiali runs on OpenShift it needs access to some OpenShift specific resources in order to function properly,
-which can be done using the following commands after Kiali has been installed:
-
-```bash
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["apps.openshift.io"], "resources":["deploymentconfigs"],"verbs": ["get", "list", "watch"]}}]' --type json
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["project.openshift.io"], "resources":["projects"],"verbs": ["get"]}}]' --type json
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["route.openshift.io"], "resources":["routes"],"verbs": ["get"]}}]' --type json
-```
 
 ## Generating a service graph
 
