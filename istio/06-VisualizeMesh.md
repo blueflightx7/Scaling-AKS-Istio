@@ -32,26 +32,26 @@ authenticate to Kiali.
 
 First, define the credentials you want to use as the Kiali username and passphrase:
 
-{{< text bash >}}
+```bash
 $ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
 $ KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
-{{< /text >}}
+```
 
 If you are using the Z Shell, `zsh`, use the following to define the credentials:
 
-{{< text bash >}}
+```bash
 $ KIALI_USERNAME=$(read '?Kiali Username: ' uval && echo -n $uval | base64)
 $ KIALI_PASSPHRASE=$(read -s "?Kiali Passphrase: " pval && echo -n $pval | base64)
-{{< /text >}}
+```
 
 To create a secret, run the following commands:
 
-{{< text bash >}}
+```bash
 $ NAMESPACE=istio-system
 $ kubectl create namespace $NAMESPACE
-{{< /text >}}
+```
 
-{{< text bash >}}
+```bash
 $ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
@@ -65,7 +65,7 @@ data:
   username: $KIALI_USERNAME
   passphrase: $KIALI_PASSPHRASE
 EOF
-{{< /text >}}
+```
 
 ### Install Via Helm
 
@@ -73,10 +73,10 @@ Once you create the Kiali secret, follow
 [the Helm install instructions](/docs/setup/kubernetes/install/helm/) to install Kiali via Helm.
 You must use the `--set kiali.enabled=true` option when you run the `helm` command, for example:
 
-{{< text bash >}}
+```bash
 $ helm template --set kiali.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
 $ kubectl apply -f $HOME/istio.yaml
-{{< /text >}}
+```
 
 {{< idea >}}
 This task does not discuss Jaeger and Grafana. If
@@ -84,7 +84,7 @@ you already installed them in your cluster and you want to see how Kiali
 integrates with them, you must pass additional arguments to the
 `helm` command, for example:
 
-{{< text bash >}}
+```bash
 $ helm template \
     --set kiali.enabled=true \
     --set "kiali.dashboard.jaegerURL=http://jaeger-query:16686" \
@@ -92,7 +92,7 @@ $ helm template \
     install/kubernetes/helm/istio \
     --name istio --namespace istio-system > $HOME/istio.yaml
 $ kubectl apply -f $HOME/istio.yaml
-{{< /text >}}
+```
 
 {{< /idea >}}
 
@@ -103,19 +103,19 @@ Once you install Istio and Kiali, deploy the [Bookinfo](/docs/examples/bookinfo/
 When Kiali runs on OpenShift it needs access to some OpenShift specific resources in order to function properly,
 which can be done using the following commands after Kiali has been installed:
 
-{{< text bash >}}
+```bash
 $ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["apps.openshift.io"], "resources":["deploymentconfigs"],"verbs": ["get", "list", "watch"]}}]' --type json
 $ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["project.openshift.io"], "resources":["projects"],"verbs": ["get"]}}]' --type json
 $ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["route.openshift.io"], "resources":["routes"],"verbs": ["get"]}}]' --type json
-{{< /text >}}
+```
 
 ## Generating a service graph
 
 1.  To verify the service is running in your cluster, run the following command:
 
-    {{< text bash >}}
+    ```bash
     $ kubectl -n istio-system get svc kiali
-    {{< /text >}}
+    ```
 
 1.  To determine the Bookinfo URL, follow the instructions to determine the [Bookinfo ingress `GATEWAY_URL`](/docs/examples/bookinfo/#determining-the-ingress-ip-and-port).
 
@@ -125,21 +125,21 @@ $ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiG
 
     *   Use the following command multiple times:
 
-        {{< text bash >}}
+        ```bash
         $ curl http://$GATEWAY_URL/productpage
-        {{< /text >}}
+        ```
 
     *   If you installed the `watch` command in your system, send requests continually with:
 
-        {{< text bash >}}
+        ```bash
         $ watch -n 1 curl -o /dev/null -s -w %{http_code} $GATEWAY_URL/productpage
-        {{< /text >}}
+        ```
 
 1.  To open the Kiali UI, execute the following command in your Kubernetes environment:
 
-    {{< text bash >}}
+    ```bash
     $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
-    {{< /text >}}
+    ```
 
 1.  Visit <http://localhost:20001/kiali/console> in your web browser.
 
@@ -217,6 +217,6 @@ If you are not planning any follow-up tasks, remove the Bookinfo sample applicat
 
 1. To remove Kiali from a Kubernetes environment, remove all components with the `app=kiali` label:
 
-{{< text bash >}}
+```bash
 $ kubectl delete all,secrets,sa,configmaps,deployments,ingresses,clusterroles,clusterrolebindings,virtualservices,destinationrules,customresourcedefinitions --selector=app=kiali -n istio-system
-{{< /text >}}
+```
