@@ -17,7 +17,7 @@ The labs are based upon two different applications with one being a node.js appl
 ### Lab Pre-Work and Additional Labs
 Topics for pre-work include foundational Kubernetes concepts along with foundational OSS tools and syntax references. Labs within pre-work will provide a foundation for Kubernetes with Advanced labs available for further skill-building activities
 
-  1. [Service Mesh Lab Pre-Work](prework/prework.md)
+  1. [Service Mesh Lab Pre-Work](prework/PreWork.md)
    
 
 ### Service Mesh Labs
