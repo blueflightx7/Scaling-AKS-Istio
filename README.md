@@ -12,44 +12,24 @@ The labs are based upon two different applications with one being a node.js appl
 
 > Note: Since we are working on a jumpbox, note that Copy and Paste are a bit different when working in the terminal. You can use Shift+Ctrl+C for Copy and Shift+Ctrl+V for Paste when working in the terminal. Outside of the terminal Copy and Paste behaves as expected using Ctrl+C and Ctrl+V. 
 
-## Labs
+## Links
 
-### Day 0 - Lab Pre-Work
+### Lab Pre-Work and Additional Labs
+Topics for pre-work covering foundational Kubernetest topics and also foundational OSS tools and syntax.
 
-  1. [Welcome to Microsoft and Open Source](prework/readme/welcome.md)
-  2. Introduction to Linux (Coming Soon)
-  3. Introduction to the Linux Console (Coming Soon)
-  4. [Introduction to YAML](prework/readme/introtoyaml.md)
- 
+  1. [Service Mesh Lab Pre-Work](prework/readme/welcome.md)
+   
 
-### Day 1 - Introduction and Presentations
+### Service Mesh Labs
 
-  0. [Setup Lab environment](labs/day1-labs/00-lab-environment.md)
-  1. [Run app locally to test components](labs/day1-labs/01-setup-app-local.md)
-  2. [Create Docker images for apps and push to Azure Container Registry](labs/day1-labs/02-dockerize-apps.md)
-
-### Day 2 - Labs
-
-  3. [Create an Azure Kubernetes Service (AKS) cluster](labs/day1-labs/03-create-aks-cluster.md)
-  4. [Deploy application to Azure Kubernetes Service](labs/day1-labs/04-deploy-app-aks.md)
-  5. [Kubernetes UI Overview](labs/day1-labs/05-kubernetes-ui.md)
-  6. [Operational Monitoring and Log Management](labs/day1-labs/06-monitoring-k8s.md)
-  7. [Upgrade an Azure Kubernetes Service (AKS) cluster](labs/day1-labs/07-cluster-upgrading.md)
-  8. [Application and Infrastructure Scaling](labs/day1-labs/07-cluster-scaling.md)
-  9. [Moving your data services to Azure PaaS (CosmosDB)](labs/day1-labs/08-migrate-mongo-to-cosmos.md)
-  10. [Update and Deploy New Version of Application](labs/day1-labs/09-update-application.md)
+  1. [Lab Access URL (temporary)](istio/01-lan-intro.md)
+  2. [Initial Configuration](istio/02-InitialConfig.md)
+  3. [Sample Application Setup](istio/03-bookinfo_app.md)
+  4. [Traffic Routing]()
+  5. [Authorization with HTTP](05-AuthzHTTP.md)
+  6. [Visualize the Mesh](06-VisualizeMesh.md)
 
 
-### Day 3/ 4 - Labs
-
-  11. Try [CI/CD Automation with Brigade](labs/day2-labs/cicd-brigade.md) or [CI/CD Automation with Azure DevOps](labs/day2-labs/cicd-vsts.md)
-  12. [Kubernetes Ingress Controllers](labs/day2-labs/ingress-controller.md)
-  13. [Kubernetes InitContainers](labs/day2-labs/init-containers.md)
-  14. [Kubernetes Persistent Volumes with Azure Disks](labs/day2-labs/persistent-volumes.md )
-  15. [Azure Service Broker](labs/day2-labs/open-service-broker.md)
-  16. [Azure Container Instances and ACI Connector](labs/day2-labs/virtual-kubelet-aci.md)
-  17. [Manage AKS with Weave](labs/day2-labs/manage-aks-using-weave.md)
-  
   
 ## Contributing
 
