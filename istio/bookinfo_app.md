@@ -1,7 +1,6 @@
 **INSTALL BOOKINFO SAMPLE APP**
 
 
-
 Change directory to the root of the Istio installation ( /istio ).
 
 The default Istio installation uses automatic sidecar injection. Label the namespace that will host the application with istio-injection=enabled:
@@ -34,7 +33,7 @@ To confirm that the Bookinfo application is running, send a request to it by a c
 **Step3:** Make sure app is working fine internally
 
 ```
-kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath=&#39;{.items[0].metadata.name}&#39;) -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>" 
+kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>" 
 ```
 Now that the Bookinfo services are up and running, you need to make the application accessible from outside of your Kubernetes cluster, e.g., from a browser. An Istio Gateway is used for this purpose.
 
