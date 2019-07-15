@@ -1,222 +1,116 @@
----
-title: Visualizing Your Mesh
-description: This task shows you how to visualize your services within an Istio mesh.
-weight: 49
-keywords: [telemetry,visualization]
----
+#
+# Visualizing Metrics with Grafana
 
-This task shows you how to visualize different aspects of your Istio mesh.
+This task shows you how to setup and use the Istio Dashboard to monitor mesh traffic. As part of this task, you will use the Grafana Istio add-on and the web-based interface for viewing service mesh traffic data.
 
-As part of this task, you install the [Kiali](https://www.kiali.io) add-on
-and use the web-based graphical user interface to view service graphs of
-the mesh and your Istio configuration objects. Lastly, you use the Kiali
-Public API to generate graph data in the form of consumable JSON.
+The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is used as the example application throughout this task.
 
-This task uses the [Bookinfo](/docs/examples/bookinfo/) sample application as the example throughout.
+## **Before you begin**
 
-## Before you begin
+- [Install Istio](https://istio.io/docs/setup) in your cluster. If you are installing using Helm, enable the Grafana add-on --set grafana.enabled=true[Option](https://istio.io/docs/reference/config/installation-options/).
+- Deploy [Bookinfo](https://istio.io/docs/examples/bookinfo/) application.
 
-{{< idea >}}
-The following instructions assume you have installed Helm and use it to install Kiali.
-To install Kiali without using Helm, follow the [Kiali installation instructions](https://www.kiali.io/gettingstarted/).
-{{< /idea >}}
+## **Viewing the Istio Dashboard**
 
-### Create a secret
+1. Verify that the prometheus service is running in your cluster.
 
-{{< idea >}}
-If you plan on installing Kiali using the `istio-demo.yaml` or `istio-demo-auth.yaml` file as described in the [Istio Quick Start Installation Steps](/docs/setup/kubernetes/install/kubernetes/#installation-steps) then a default secret will be created for you with a username of `admin` and passphrase of `admin`. You can therefore skip this section.
-{{< /idea >}}
-
-Create a secret in your Istio namespace with the credentials that you use to
-authenticate to Kiali.
-
-First, define the credentials you want to use as the Kiali username and passphrase:
-
-```bash
-$ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
-$ KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
-```
-
-If you are using the Z Shell, `zsh`, use the following to define the credentials:
-
-```bash
-$ KIALI_USERNAME=$(read '?Kiali Username: ' uval && echo -n $uval | base64)
-$ KIALI_PASSPHRASE=$(read -s "?Kiali Passphrase: " pval && echo -n $pval | base64)
-```
-
-To create a secret, run the following commands:
-
-```bash
-$ NAMESPACE=istio-system
-$ kubectl create namespace $NAMESPACE
-```
-
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: kiali
-  namespace: $NAMESPACE
-  labels:
-    app: kiali
-type: Opaque
-data:
-  username: $KIALI_USERNAME
-  passphrase: $KIALI_PASSPHRASE
-EOF
-```
-
-### Install Via Helm
-
-Once you create the Kiali secret, follow
-[the Helm install instructions](/docs/setup/kubernetes/install/helm/) to install Kiali via Helm.
-You must use the `--set kiali.enabled=true` option when you run the `helm` command, for example:
-
-```bash
-$ helm template --set kiali.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
-$ kubectl apply -f $HOME/istio.yaml
-```
-
-{{< idea >}}
-This task does not discuss Jaeger and Grafana. If
-you already installed them in your cluster and you want to see how Kiali
-integrates with them, you must pass additional arguments to the
-`helm` command, for example:
-
-```bash
-$ helm template \
-    --set kiali.enabled=true \
-    --set "kiali.dashboard.jaegerURL=http://jaeger-query:16686" \
-    --set "kiali.dashboard.grafanaURL=http://grafana:3000" \
-    install/kubernetes/helm/istio \
-    --name istio --namespace istio-system > $HOME/istio.yaml
-$ kubectl apply -f $HOME/istio.yaml
-```
-
-{{< /idea >}}
-
-Once you install Istio and Kiali, deploy the [Bookinfo](/docs/examples/bookinfo/) sample application.
-
-### Running on OpenShift
-
-When Kiali runs on OpenShift it needs access to some OpenShift specific resources in order to function properly,
-which can be done using the following commands after Kiali has been installed:
-
-```bash
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["apps.openshift.io"], "resources":["deploymentconfigs"],"verbs": ["get", "list", "watch"]}}]' --type json
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["project.openshift.io"], "resources":["projects"],"verbs": ["get"]}}]' --type json
-$ oc patch clusterrole kiali -p '[{"op":"add", "path":"/rules/-", "value":{"apiGroups":["route.openshift.io"], "resources":["routes"],"verbs": ["get"]}}]' --type json
-```
-
-## Generating a service graph
-
-1.  To verify the service is running in your cluster, run the following command:
-
-    ```bash
-    $ kubectl -n istio-system get svc kiali
+    In Kubernetes environments, execute the following command:
     ```
-
-1.  To determine the Bookinfo URL, follow the instructions to determine the [Bookinfo ingress `GATEWAY_URL`](/docs/examples/bookinfo/#determining-the-ingress-ip-and-port).
-
-1.  To send traffic to the mesh, you have three options
-
-    *   Visit `http://$GATEWAY_URL/productpage` in your web browser
-
-    *   Use the following command multiple times:
-
-        ```bash
-        $ curl http://$GATEWAY_URL/productpage
-        ```
-
-    *   If you installed the `watch` command in your system, send requests continually with:
-
-        ```bash
-        $ watch -n 1 curl -o /dev/null -s -w %{http_code} $GATEWAY_URL/productpage
-        ```
-
-1.  To open the Kiali UI, execute the following command in your Kubernetes environment:
-
-    ```bash
-    $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
+    $ kubectl -n istio-system get svc prometheus
     ```
+    ```
+    NAME         CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE_
 
-1.  Visit <http://localhost:20001/kiali/console> in your web browser.
+    prometheus   10.59.241.54   none        9090/TCP     2m
+    ```
+    
+2. Verify that the Grafana service is running in your cluster.
 
-1.  To log into the Kiali UI, go to the Kiali login screen and enter the username and passphrase stored in the Kiali secret.
+   In Kubernetes environments, execute the following command:
+   ```
+   $ kubectl -n istio-system get svc grafana
+   ```
+   ```
+   NAME      CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE_
 
-1.  View the overview of your mesh in the **Overview** page that appears immediately after you log in.
-    The **Overview** page displays all the namespaces that have services in your mesh.
-    The following screenshot shows a similar page:
+   grafana   10.59.247.103   none          3000/TCP   2m_
+   ```
+   
+3. Open the Istio Dashboard via the Grafana UI.
 
-    {{< image width="75%" link="./kiali-overview.png" caption="Example Overview" >}}
+   In Kubernetes environments, execute the following command:
+  
+   ```
+    $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+   ```
+  
+  Visit [http://localhost:3000/dashboard/db/istio-mesh-dashboard](http://localhost:3000/dashboard/db/istio-mesh-dashboard) in your web     browser.
 
-1.  To view a namespace graph, click on the `bookinfo` graph icon in the Bookinfo namespace card. The graph icon is in the lower left of
-    the namespace card and looks like a connected group of circles.
-    The page looks similar to:
+  The Istio Dashboard will look similar to:
 
-    {{< image width="75%" link="./kiali-graph.png" caption="Example Graph" >}}
+ ![](https://istio.io/docs/tasks/telemetry/metrics/using-istio-dashboard/grafana-istio-dashboard.png)
 
-1.  To view a summary of metrics, select any node or edge in the graph to display
-    its metric details in the summary details panel on the right.
 
-1.  To view your service mesh using different graph types, select a graph type
-    from the **Graph Type** drop down menu. There are several graph types
-    to choose from: **App**, **Versioned App**, **Workload**, **Service**.
+                                        Istio Dashboard
 
-    *   The **App** graph type aggregates all versions of an app into a single graph node.
-        The following example shows a single **reviews** node representing the three versions
-        of the reviews app.
+4. Send traffic to the mesh.
 
-        {{< image width="75%" link="./kiali-app.png" caption="Example App Graph" >}}
+  For the Bookinfo sample, visit http://$GATEWAY\_URL/productpage in your web browser or issue the following command:
+  ```
+  $ curl http://$GATEWAY\_URL/productpage
+  ```
+  $GATEWAY\_URL is the value set in the [Bookinfo](https://istio.io/docs/examples/bookinfo/) example.
 
-    *   The **Versioned App** graph type shows a node for each version of an app,
-        but all versions of a particular app are grouped together. The following example
-        shows the **reviews** group box that contains the three nodes that represents the
-        three versions of the reviews app.
+  Refresh the page a few times (or send the command a few times) to generate a small amount of traffic.
 
-        {{< image width="75%" link="./kiali-versionedapp.png" caption="Example Versioned App Graph" >}}
+  Look at the Istio Dashboard again. It should reflect the traffic that was generated. It will look similar to:
 
-    *   The **Workload** graph type shows a node for each workload in your service mesh.
-        This graph type does not require you to use the `app` and `version` labels so if you
-        opt to not use those labels on your components, this is the graph type you will use.
+ ![](https://istio.io/docs/tasks/telemetry/metrics/using-istio-dashboard/dashboard-with-traffic.png)
 
-        {{< image width="70%" link="./kiali-workload.png" caption="Example Workload Graph" >}}
+                            Istio Dashboard With Traffic
 
-    *   The **Service** graph type shows a node for each service in your mesh but excludes
-        all apps and workloads from the graph.
+  This gives the global view of the Mesh along with services and workloads in the mesh. You can get more details about services and     workloads by navigating to their specific dashboards as explained below.
 
-        {{< image width="70%" link="./kiali-service-graph.png" caption="Example Service Graph" >}}
+5. Visualize Service Dashboards.
 
-1. To examine the details about the Istio configuration, click on the
-   **Applications**, **Workloads**, and **Services** menu icons on the left menu
-   bar. The following screenshot shows the Bookinfo applications information:
+   From the Grafana dashboard's left hand corner navigation menu, you can navigate to Istio Service Dashboard or visit [http://localhost:3000/dashboard/db/istio-service-dashboard](http://localhost:3000/dashboard/db/istio-service-dashboard) in your web browser.
 
-   {{< image width="80%" link="./kiali-services.png" caption="Example Details" >}}
+   The Istio Service Dashboard will look similar to:
 
-## About the Kiali Public API
+ ![](https://istio.io/docs/tasks/telemetry/metrics/using-istio-dashboard/istio-service-dashboard.png)
 
-To generate JSON files representing the graphs and other metrics, health, and
-configuration information, you can access the
-[Kiali Public API](https://www.kiali.io/api).
-For example, point your browser to `$KIALI_URL/api/namespaces/graph?namespaces=bookinfo&graphType=app`
-to get the JSON representation of your graph using the `app` graph type.
+              Istio Service Dashboard
 
-The Kiali Public API is built on top of Prometheus queries and depends on the
-standard Istio metric configuration.  It also makes Kubernetes API calls to
-obtain additional details about your services. For the best experience using
-Kiali, use the metadata labels `app` and `version` on your application
-components. As a template, the Bookinfo sample application follows this
-convention.
+   This gives details about metrics for the service and then client workloads (workloads that are calling this service) and service workloads (workloads that are providing this service) for that service.
 
-## Cleanup
+6. Visualize Workload Dashboards.
 
-If you are not planning any follow-up tasks, remove the Bookinfo sample application and Kiali from your cluster.
+   From the Grafana dashboard left hand corner navigation menu, you can navigate to Istio Workload Dashboard or visit [http://localhost:3000/dashboard/db/istio-workload-dashboard](http://localhost:3000/dashboard/db/istio-workload-dashboard) in your web browser.
 
-1. To remove the Bookinfo application, refer to the [Bookinfo cleanup](/docs/examples/bookinfo/#cleanup) instructions.
+   The Istio Workload Dashboard will look similar to:
 
-1. To remove Kiali from a Kubernetes environment, remove all components with the `app=kiali` label:
+ ![](https://istio.io/docs/tasks/telemetry/metrics/using-istio-dashboard/istio-workload-dashboard.png)
 
-```bash
-$ kubectl delete all,secrets,sa,configmaps,deployments,ingresses,clusterroles,clusterrolebindings,virtualservices,destinationrules,customresourcedefinitions --selector=app=kiali -n istio-system
+                Istio Workload Dashboard
+
+   This gives details about metrics for each workload and then inbound workloads (workloads that are sending request to this workload) and outbound services (services to which this workload send requests) for that workload.
+
+### **About the Grafana add-on**
+
+The Grafana add-on is a preconfigured instance of Grafana. The base image ([grafana/grafana:5.2.3](https://hub.docker.com/r/grafana/grafana/)) has been modified to start with both a Prometheus data source and the Istio Dashboard installed. The base install files for Istio, and Mixer in particular, ship with a default configuration of global (used for every service) metrics. The Istio Dashboard is built to be used in conjunction with the default Istio metrics configuration and a Prometheus backend.
+
+The Istio Dashboard consists of three main sections:
+
+1. A Mesh Summary View. This section provides Global Summary view of the Mesh and shows HTTP/gRPC and TCP workloads in the Mesh.
+2. Individual Services View. This section provides metrics about requests and responses for each individual service within the mesh (HTTP/gRPC and TCP). This also provides metrics about client and service workloads for this service.
+3. Individual Workloads View: This section provides metrics about requests and responses for each individual workload within the mesh (HTTP/gRPC and TCP). This also provides metrics about inbound workloads and outbound services for this workload.
+
+For more on how to create, configure, and edit dashboards, please see the [Grafana documentation](https://docs.grafana.org/).
+
+## **Cleanup**
+
+- Remove any kubectl port-forward processes that may be running:
 ```
+$ killall kubectl
+```
+- If you are not planning to explore any follow-on tasks, refer to the [Bookinfo cleanup](https://istio.io/docs/examples/bookinfo/#cleanup) instructions to shutdown the application.
