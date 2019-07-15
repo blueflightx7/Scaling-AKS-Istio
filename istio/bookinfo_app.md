@@ -1,12 +1,11 @@
 **INSTALL BOOKINFO SAMPLE APP**
 
-
 **NOTE:** Change directory to the root of the Istio installation ( /istio ).
 
-The default Istio installation uses automatic sidecar injection. Label the namespace that will host the application with istio-injection=enabled:
+
+The default Istio installation uses automatic sidecar injection on the namespaces having the label 'istio-injection=enabled'. So label the default namespace for Istio to automatically create a sidecar container inside the application pods in the default namespace. 
 
 **Step1:**  enable istio injection on default namespace
-
 ```
 kubectl label namespace default istio-injection=enabled
 ```
@@ -20,7 +19,6 @@ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
 The command above launches all four services shown in the bookinfo application architecture including all 3 versions of the reviews service, v1, v2, and v3.
 
 Confirm all services and pods are correctly defined and running:
-
 ```
 kubectl get pods
 ```
