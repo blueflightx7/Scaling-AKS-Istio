@@ -28,7 +28,7 @@ Topics for pre-work include foundational Kubernetes concepts along with foundati
   4. [Traffic Routing](istio/04-trafficmanagement.md)
   5. [Authorization with HTTP](istio/05-AuthzHTTP.md)
   6. [Visualize the Mesh](istio/06-VisualizeMesh.md)
-
+  7. [Kiali](istio/Kiali.md)
 
   
 ## Contributing
