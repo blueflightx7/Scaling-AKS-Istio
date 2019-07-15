@@ -66,6 +66,26 @@ Run the following command to list the HELM packages available.
 helm ls
 ```
 
+**WARNING** In some cases it's necessary to add the directory manually to your $PATH variable.
+
+```output
+helm not found. Is /usr/local/bin in your $PATH?
+Failed to install helm
+```
+
+To fix this issue you have to add /usr/local/bin to your $PATH variable
+
+```bash
+PATH=$PATH:/usr/local/bin
+```
+
+To make this permanently and not only for the current session you can add it to your .bash_profile which is executed everytime a bash is started.
+
+```bash
+echo 'export PATH=/usr/local/bin:$PATH' >>~/.bash_profile
+```
+
+
 You will see an error message hinting that you don’t have the enough access rights in the cluster/namespaces. 
 
 **Step2:** To fix the permission issues, follow the below steps to create a service account for tiller and get the proper RBAC privileges applied for the service account.
