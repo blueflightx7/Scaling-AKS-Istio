@@ -22,12 +22,12 @@ Topics for pre-work covering foundational Kubernetest topics and also foundation
 
 ### Service Mesh Labs
 
-  1. [Lab Access URL (temporary)](istio/01-lan-intro.md)
+  1. [Lab Access URL (temporary)](istio/01-Lab-Intro.md)
   2. [Initial Configuration](istio/02-InitialConfig.md)
   3. [Sample Application Setup](istio/03-bookinfo_app.md)
   4. [Traffic Routing]()
-  5. [Authorization with HTTP](05-AuthzHTTP.md)
-  6. [Visualize the Mesh](06-VisualizeMesh.md)
+  5. [Authorization with HTTP](istio/05-AuthzHTTP.md)
+  6. [Visualize the Mesh](istio/06-VisualizeMesh.md)
 
 
   
