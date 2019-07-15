@@ -25,7 +25,7 @@ Topics for pre-work include foundational Kubernetes concepts along with foundati
   1. [Lab Access URL (temporary)](istio/01-Lab-Intro.md)
   2. [Initial Configuration](istio/02-InitialConfig.md)
   3. [Sample Application Setup](istio/03-bookinfo_app.md)
-  4. [Traffic Routing]()
+  4. [Traffic Routing](istio/04-trafficmanagement.md)
   5. [Authorization with HTTP](istio/05-AuthzHTTP.md)
   6. [Visualize the Mesh](istio/06-VisualizeMesh.md)
 
