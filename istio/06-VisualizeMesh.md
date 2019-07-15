@@ -9,7 +9,7 @@ The [Bookinfo](https://istio.io/docs/examples/bookinfo/) sample application is u
 
 - [Install Istio](https://istio.io/docs/setup) in your cluster. If you are installing using Helm, enable the Grafana add-on --set grafana.enabled=true[Option](https://istio.io/docs/reference/config/installation-options/).
 - Deploy [Bookinfo](https://istio.io/docs/examples/bookinfo/) application.
-- Ensure that you have Powershell session in your local computer connected to your azure account and the AKS cluster. Refer the "Initial Configuration" section for the steps. 
+- Ensure that you have Powershell session in your local computer connected to your azure account and the AKS cluster. Refer the "Initial Configuration" exercise for the steps. 
 
 ## **Viewing the Istio Dashboard**
 
