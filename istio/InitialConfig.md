@@ -30,12 +30,12 @@ Sample output:
 [root@jumpbox ~]# az aks list -o table
 Name      Location    ResourceGroup    KubernetesVersion    ProvisioningState                                                                                                        
 --------  ----------  ---------------  -------------------  -------------------                                                                                                      
-acs73294  westus      labrg-73294      1.12.8               Succeeded                                                                                                                
+acs73294  westus      labrg-73294      1.12.8               Succeeded                                                                                                               
 ```
 
 **Step4:** Connect to the AKS cluster
 ```
-az aks get-credentials -n <cluster_info> -g <resourcegroupname>
+az aks get-credentials -n <cluster_name> -g <resourcegroupname>
 ```
 Eg: az aks get-credentials -n acs73293 -g labrg-73293
  
@@ -43,7 +43,6 @@ Eg: az aks get-credentials -n acs73293 -g labrg-73293
 ```
 kubectl cluster-info
 kubectl get nodes
-
 ```
 <h3>HELM Configuration</h3>
 Configure the Cluster Role and RoleBinding to provide enough RBAC access in the cluster to perform the HELM tasks. 
